@@ -1,0 +1,65 @@
+name: Deploy preview vercel
+
+env:
+  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
+on:
+  pull_request:
+    branches:
+      - dev
+    types: 
+      - closed
+
+jobs:
+  deploy-preview-to-vercel:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true
+
+    services:
+      app:
+        image: node:18
+        ports:
+          - 3000
+        options: --name app --init --entrypoint npm
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - uses: docker/setup-buildx-action@v2
+      
+      - uses: docker/build-push-action@v4
+        with:
+          context: .
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Build and start container
+        run: |
+          docker-compose up -d
+          docker-compose ps
+
+      - name: Install dependencies
+        run: docker-compose run --rm --user root app npm ci
+  
+      - name: format
+        run: docker-compose run --rm --user root app npm run format
+  
+      - name: lint
+        run: docker-compose run --rm --user root app npm run lint
+
+      - name: test
+        run: docker-compose run --rm --user root app npm run test
+
+      - name: Install Vercel CLI
+        run: docker-compose run --rm --user root app npm install --global vercel@latest
+
+      - name: Pull Vercel Environment Information
+        run: docker-compose run --rm --user root app npx vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Build Project Artifacts
+        run: docker-compose run --rm --user root app npx vercel build --token=${{ secrets.VERCEL_TOKEN }}
+        
+      - name: Deploy Project Artifacts to Vercel
+        run: docker-compose run --rm --user root app npx vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }}

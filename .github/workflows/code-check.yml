@@ -1,0 +1,49 @@
+name: Code check
+
+on: 
+  pull_request:
+    branches:
+      - feature/**
+    types: 
+      - opened
+
+jobs:
+  code-check:
+    runs-on: ubuntu-latest
+    if: contains(github.head_ref, 'feature')
+
+    services:
+      app:
+        image: node:18
+        ports:
+          - 3000
+        options: --name app --init --entrypoint npm
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - uses: docker/setup-buildx-action@v2
+      
+      - uses: docker/build-push-action@v4
+        with:
+          context: .
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Build and start container
+        run: |
+          docker-compose up -d
+          docker-compose ps
+
+      - name: Install dependencies
+        run: docker-compose run --rm --user root app npm ci
+  
+      - name: format
+        run: docker-compose run --rm --user root app npm run format
+  
+      - name: lint
+        run: docker-compose run --rm --user root app npm run lint
+
+      - name: test
+        run: docker-compose run --rm --user root app npm run test
