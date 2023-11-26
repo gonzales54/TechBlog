@@ -3,7 +3,7 @@ name: Code check
 on: 
   pull_request:
     branches:
-      - feature/**
+      - dev
     types: 
       - opened
 
