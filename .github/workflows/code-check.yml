@@ -2,8 +2,6 @@ name: Code check
 
 on: 
   pull_request:
-    branches:
-      - dev
     types: 
       - opened
 
