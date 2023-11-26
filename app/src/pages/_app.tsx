@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import type { AppProps } from "next/app";
 
 import { initMock } from "@/mocks";
+import { ThemeProvider } from "next-themes";
 
 export default function App({ Component, pageProps }: AppProps) {
   const [isLoading, setLoading] = useState(false);
@@ -18,5 +19,9 @@ export default function App({ Component, pageProps }: AppProps) {
     }
   }, [isLoading]);
 
-  return <Component {...pageProps} />;
+  return (
+    <ThemeProvider attribute="class" defaultTheme="light">
+      <Component {...pageProps} />
+    </ThemeProvider>
+  );
 }
