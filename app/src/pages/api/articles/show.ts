@@ -2,10 +2,12 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
 import Manager from "@/feature/Manager";
-import { IArticle } from "@/types/IArticle";
+import { IArticle, IArticleInfo, PrevAndNextArticleData } from "@/types/IArticle";
 
 interface Data {
   article: IArticle;
+  prev: IArticleInfo | null;
+  next: IArticleInfo | null;
 }
 
 export default function handler(
@@ -13,6 +15,6 @@ export default function handler(
   res: NextApiResponse<Data>,
 ) {
   const title = req.query.title as string;
-  const article = Manager.show(title.replace("/", ""));
-  res.status(200).json({ article: article });
+  const { article, prev, next } = Manager.show(title.replace("/", ""));
+  res.status(200).json({ article: article, prev: prev, next: next });
 }

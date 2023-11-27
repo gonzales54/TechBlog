@@ -18,8 +18,6 @@ interface PathType {
 }
 
 const Content = ({ article }: ArticleType) => {
-  console.log(article);
-
   return (
     <Layout title="R'IndiCode">
       <main className="flex min-h-[calc(100vh-49px)] w-full flex-col overflow-x-hidden px-5 pb-8 pt-20 dark:bg-gray-900">
