@@ -1,3 +1,5 @@
+import Link from "next/link";
+import { HiChevronLeft, HiChevronRight } from "react-icons/hi2";
 import Markdown from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { vscDarkPlus } from "react-syntax-highlighter/dist/cjs/styles/prism";
@@ -5,9 +7,9 @@ import remarkGfm from "remark-gfm";
 
 import { Layout } from "@/components/layout/Layout";
 import Manager from "@/feature/Manager";
-import { IArticle } from "@/types/IArticle";
+import { IArticle, PrevAndNextArticleData } from "@/types/IArticle";
 
-interface ArticleType {
+interface ArticleType extends PrevAndNextArticleData {
   article: IArticle;
 }
 
@@ -17,11 +19,11 @@ interface PathType {
   };
 }
 
-const Content = ({ article }: ArticleType) => {
+const Content = ({ article, prev, next }: ArticleType) => {
   return (
     <Layout title="R'IndiCode">
       <main className="flex min-h-[calc(100vh-49px)] w-full flex-col overflow-x-hidden px-5 pb-8 pt-20 dark:bg-gray-900">
-        <article>
+        <article className="mb-4">
           <Markdown
             components={{
               h1(props) {
@@ -70,6 +72,30 @@ const Content = ({ article }: ArticleType) => {
             {article.content}
           </Markdown>
         </article>
+        <ul className="flex items-center justify-between gap-x-4 py-4">
+          {prev && (
+            <li className="mr-auto w-[calc(50%-8px)] rounded border dark:border-gray-400 dark:text-gray-200">
+              <Link
+                className="flex items-center gap-x-2 p-3"
+                href={`/articles/${prev.href}`}
+              >
+                <HiChevronLeft className="h-5 w-5" />
+                <p className="text-xs">{prev.title}</p>
+              </Link>
+            </li>
+          )}
+          {next && (
+            <li className="ml-auto w-[calc(50%-8px)] rounded border dark:border-gray-400 dark:text-gray-200">
+              <Link
+                className="flex items-center gap-x-2 p-3"
+                href={`/articles/${next.href}`}
+              >
+                <p className="text-xs">{next.title}</p>
+                <HiChevronRight className="h-8 w-5" />
+              </Link>
+            </li>
+          )}
+        </ul>
       </main>
     </Layout>
   );
@@ -91,11 +117,13 @@ export const getStaticPaths = () => {
 };
 
 export const getStaticProps = ({ params }: PathType) => {
-  const article = Manager.show(params.article);
+  const { article, prev, next } = Manager.show(params.article);
 
   return {
     props: {
       article: article,
+      prev: prev,
+      next: next,
     },
   };
 };

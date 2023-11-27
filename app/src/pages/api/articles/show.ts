@@ -2,12 +2,10 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
 import Manager from "@/feature/Manager";
-import { IArticle, IArticleInfo, PrevAndNextArticleData } from "@/types/IArticle";
+import { IArticle, PrevAndNextArticleData } from "@/types/IArticle";
 
-interface Data {
+interface Data extends PrevAndNextArticleData {
   article: IArticle;
-  prev: IArticleInfo | null;
-  next: IArticleInfo | null;
 }
 
 export default function handler(

@@ -5,7 +5,6 @@ import { Card } from "@/components/model/Card";
 import Manager from "@/feature/Manager";
 import { IArticleInfo } from "@/types/IArticle";
 
-
 interface Response {
   articles: IArticleInfo[];
 }

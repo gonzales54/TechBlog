@@ -43,33 +43,45 @@ class ManagerClass {
       join(this.dirPath, `${slug}.md`),
       "utf-8",
     );
-    const currentArticleIndex = this.articles.findIndex((article) => article.href === slug)
+    const currentArticleIndex = this.articles.findIndex(
+      (article) => article.href === slug,
+    );
 
     let finishedFlag = false;
-    const target = this.articles.map(() => {
-      if(!finishedFlag) {
-        if(currentArticleIndex === 0) {
-          finishedFlag = true;
+    const target = this.articles
+      .map(() => {
+        if(this.articles.length === 1) {
           return {
             prev: null,
-            next: this.articles[currentArticleIndex + 1]
-          }
-        };
-        if(this.articles.length === currentArticleIndex + 1) {
-          finishedFlag = true;
-          return {
-            prev: this.articles[currentArticleIndex - 1],
             next: null
           }
         }
-        return {
-          prev: this.articles[currentArticleIndex - 1],
-          next: this.articles[currentArticleIndex + 1]
+        if (!finishedFlag) {
+          if (currentArticleIndex === 0) {
+            finishedFlag = true;
+            return {
+              prev: null,
+              next: this.articles[currentArticleIndex + 1],
+            };
+          }
+          if (this.articles.length === currentArticleIndex + 1) {
+            finishedFlag = true;
+            return {
+              prev: this.articles[currentArticleIndex - 1],
+              next: null,
+            };
+          }
+          return {
+            prev: this.articles[currentArticleIndex - 1],
+            next: this.articles[currentArticleIndex + 1],
+          };
         }
-      }
-    }).filter((v) => v) as PrevAndNextArticleData[];
+      })
+      .filter((v) => v) as PrevAndNextArticleData[];
 
     const { data, content } = matter(markdownData);
+
+    console.log(target)
 
     const result = {
       ...(<IArticleInfo>data),
@@ -79,8 +91,8 @@ class ManagerClass {
     return {
       article: result,
       prev: target[0].prev,
-      next: target[0].next
-    }
+      next: target[0].next,
+    };
   }
 }
 
