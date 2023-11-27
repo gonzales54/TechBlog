@@ -1,4 +1,4 @@
-name: Deploy production vercel
+name: Cron deploy production vercel
 
 env:
   VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
@@ -6,12 +6,11 @@ env:
 
 on:
   schedule:
-    - cron: '* * */2 * *'
+    - cron: '0 0 */2 * *'
 
 jobs:
-  deploy-production-to-vercel:
+  cron-deploy-production-to-vercel:
     runs-on: ubuntu-latest
-    if: github.event.pull_request.merged == true
 
     services:
       app:
