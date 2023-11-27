@@ -2,9 +2,9 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
 import Manager from "@/feature/Manager";
-import { IArticle } from "@/types/IArticle";
+import { IArticle, PrevAndNextArticleData } from "@/types/IArticle";
 
-interface Data {
+interface Data extends PrevAndNextArticleData {
   article: IArticle;
 }
 
@@ -13,6 +13,6 @@ export default function handler(
   res: NextApiResponse<Data>,
 ) {
   const title = req.query.title as string;
-  const article = Manager.show(title.replace("/", ""));
-  res.status(200).json({ article: article });
+  const { article, prev, next } = Manager.show(title.replace("/", ""));
+  res.status(200).json({ article: article, prev: prev, next: next });
 }
