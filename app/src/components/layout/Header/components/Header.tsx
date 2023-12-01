@@ -14,7 +14,12 @@ const Header = (props: HeaderProps) => {
             {title}
           </Link>
         </h1>
-        <nav className="flex items-center">
+        <nav className="flex items-center gap-x-4">
+          <ul className="flex items-center gap-x-2">
+            <li className="text-sm text-gray-800 dark:text-gray-100">
+              <Link href={"/snippets"}>Snippets</Link>
+            </li>
+          </ul>
           <button onClick={handleTheme}>
             {theme === "light" ? (
               <HiOutlineMoon className="h-5 w-5" />

@@ -3,12 +3,12 @@ import Link from "next/link";
 import { Props } from "../types/type";
 
 const Card = (props: Props) => {
-  const { href, createdAt, title, readingTime, className } = props;
+  const { href, createdAt, title, readingTime, className, type } = props;
   return (
     <li className={className}>
       <article>
         <Link
-          href={`/articles/${href}`}
+          href={`/${type}/${href}`}
           className="flex border-b py-6 text-gray-800 dark:border-gray-600"
         >
           {/*

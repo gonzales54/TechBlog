@@ -8,7 +8,7 @@ on:
 jobs:
   code-check:
     runs-on: ubuntu-latest
-    if: contains(fromJson('["feature", "dev"]'), github.head_ref)
+    if: contains(github.head_ref, 'dev') || contains(github.head_ref, 'feature')
 
     services:
       app:

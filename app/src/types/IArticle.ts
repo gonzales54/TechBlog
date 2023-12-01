@@ -6,6 +6,7 @@ export interface IArticleInfo {
   readingTime: number;
   createdAt: string;
   publish: boolean;
+  type: "articles" | "snippets";
 }
 
 export interface IArticle extends IArticleInfo {

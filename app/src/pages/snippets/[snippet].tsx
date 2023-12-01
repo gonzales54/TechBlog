@@ -6,33 +6,32 @@ import { vscDarkPlus } from "react-syntax-highlighter/dist/cjs/styles/prism";
 import remarkGfm from "remark-gfm";
 
 import { Layout } from "@/components/layout/Layout";
-import Manager from "@/feature/Manager";
+import Manager from "@/feature/SnippetManager";
 import { IArticle, PrevAndNextArticleData } from "@/types/IArticle";
 
-interface ArticleType extends PrevAndNextArticleData {
-  article: IArticle;
+interface SnippetType extends PrevAndNextArticleData {
+  snippet: IArticle;
 }
 
 interface PathType {
   params: {
-    article: string;
+    snippet: string;
   };
 }
 
-const Content = ({ article, prev, next }: ArticleType) => {
+const Content = ({ snippet, prev, next }: SnippetType) => {
   return (
     <Layout title="R'IndiCode">
       <main className="flex min-h-[calc(100vh-49px)] w-full flex-col overflow-x-hidden px-5 pb-8 pt-20 dark:bg-gray-900">
         <article className="mb-4">
           <Markdown
+            allowedElements={["h1", "pre", "code"]}
             components={{
               h1(props) {
                 return (
                   <div>
                     <div className="mt-auto flex items-center gap-x-2 text-xs text-gray-400 dark:text-gray-400">
-                      <time className="">{article.createdAt}</time>
-                      <div className="h-1 w-1 rounded-full bg-gray-400 dark:bg-gray-500"></div>
-                      <p>{article.readingTime}分で読めます</p>
+                      <time className="">{snippet.createdAt}</time>
                     </div>
                     <h1 {...props} />
                   </div>
@@ -69,7 +68,7 @@ const Content = ({ article, prev, next }: ArticleType) => {
             className="prose prose-sm prose-gray max-w-none dark:prose-invert prose-pre:bg-white prose-pre:p-0 prose-thead:bg-gray-200 prose-th:px-2 prose-th:py-3 prose-td:px-2 dark:prose-pre:bg-gray-900 dark:prose-thead:bg-gray-800"
             remarkPlugins={[remarkGfm]}
           >
-            {article.content}
+            {snippet.content}
           </Markdown>
         </article>
         <ul className="flex items-center justify-between gap-x-4 py-4">
@@ -77,7 +76,7 @@ const Content = ({ article, prev, next }: ArticleType) => {
             <li className="mr-auto w-[calc(50%-8px)] rounded border dark:border-gray-400 dark:text-gray-200">
               <Link
                 className="flex items-center gap-x-2 p-3"
-                href={`/articles/${prev.href}`}
+                href={`/snippets/${prev.href}`}
               >
                 <HiChevronLeft className="h-8 w-5" />
                 <p className="text-xs">{prev.title}</p>
@@ -88,7 +87,7 @@ const Content = ({ article, prev, next }: ArticleType) => {
             <li className="ml-auto w-[calc(50%-8px)] rounded border dark:border-gray-400 dark:text-gray-200">
               <Link
                 className="flex items-center gap-x-2 p-3"
-                href={`/articles/${next.href}`}
+                href={`/snippets/${next.href}`}
               >
                 <p className="text-xs">{next.title}</p>
                 <HiChevronRight className="h-8 w-5" />
@@ -102,11 +101,11 @@ const Content = ({ article, prev, next }: ArticleType) => {
 };
 
 export const getStaticPaths = () => {
-  const articles = Manager.index();
+  const snippets = Manager.index();
 
-  const paths: PathType[] = articles.map((article) => ({
+  const paths: PathType[] = snippets.map((snippet) => ({
     params: {
-      article: article.href,
+      snippet: snippet.href,
     },
   }));
 
@@ -117,11 +116,11 @@ export const getStaticPaths = () => {
 };
 
 export const getStaticProps = ({ params }: PathType) => {
-  const { article, prev, next } = Manager.show(params.article);
+  const { article, prev, next } = Manager.show(params.snippet);
 
   return {
     props: {
-      article: article,
+      snippet: article,
       prev: prev,
       next: next,
     },
