@@ -50,11 +50,11 @@ class ManagerClass {
     let finishedFlag = false;
     const target = this.articles
       .map(() => {
-        if(this.articles.length === 1) {
+        if (this.articles.length === 1) {
           return {
             prev: null,
-            next: null
-          }
+            next: null,
+          };
         }
         if (!finishedFlag) {
           if (currentArticleIndex === 0) {
@@ -80,8 +80,6 @@ class ManagerClass {
       .filter((v) => v) as PrevAndNextArticleData[];
 
     const { data, content } = matter(markdownData);
-
-    console.log(target)
 
     const result = {
       ...(<IArticleInfo>data),

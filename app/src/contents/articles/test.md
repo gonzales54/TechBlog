@@ -3,6 +3,7 @@ title: 日本語フェイクニュースデータセット
 createdAt: 2023/03/14
 readingTime: 4
 publish: true
+type: "articles"
 ---
 # 日本語フェイクニュースデータセット
 

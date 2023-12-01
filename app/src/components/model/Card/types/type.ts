@@ -7,4 +7,5 @@ export interface Props extends React.ComponentPropsWithoutRef<"div"> {
   createdAt: string;
   title: string;
   readingTime: number;
+  type: "articles" | "snippets";
 }
