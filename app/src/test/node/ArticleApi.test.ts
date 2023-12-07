@@ -28,7 +28,8 @@ describe("Manager test", () => {
       "日本語フェイクニュースデータセット",
     );
     expect(article).toHaveProperty("createdAt", "2023/03/14");
-    expect(article).toHaveProperty("readingTime", 4);
+    expect(article).toHaveProperty("readingTime", 6);
+    expect(article).toHaveProperty("type", "articles");
     expect(article).toHaveProperty("publish", true);
     expect(article).toHaveProperty(
       "content",
