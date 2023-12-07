@@ -26,8 +26,12 @@ const Card = (props: Props) => {
             </h3>
             <div className="mt-auto flex items-center gap-x-2 text-xs text-gray-400 dark:text-gray-400">
               <time className="">{createdAt}</time>
-              <div className="h-1 w-1 rounded-full bg-gray-400 dark:bg-gray-500"></div>
-              <p>{readingTime}分で読めます</p>
+              {type === "articles" && (
+                <>
+                  <div className="h-1 w-1 rounded-full bg-gray-400 dark:bg-gray-500"></div>
+                  <p>約{readingTime}分で読めます</p>
+                </>
+              )}
             </div>
           </div>
         </Link>

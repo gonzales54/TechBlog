@@ -1,4 +1,4 @@
-export interface IArticleInfo {
+export interface IArticleInfo extends IArticleType {
   href: string;
   src: string;
   alt: string;
@@ -6,11 +6,14 @@ export interface IArticleInfo {
   readingTime: number;
   createdAt: string;
   publish: boolean;
-  type: "articles" | "snippets";
 }
 
 export interface IArticle extends IArticleInfo {
   content: string;
+}
+
+export interface IArticleType {
+  type: "articles" | "snippets";
 }
 
 export interface PrevAndNextArticleData {

@@ -1,9 +1,7 @@
 ---
 title: "Arch LinuxにVSCodeをインストールする方法"
 createdAt: 2023/03/14
-readingTime: 4
 publish: true
-type: "snippets"
 ---
 # Arch LinuxにVSCodeをインストールする方法
 

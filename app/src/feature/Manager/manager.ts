@@ -3,7 +3,12 @@ import { join } from "path";
 
 import matter from "gray-matter";
 
-import { IArticleInfo, PrevAndNextArticleData } from "@/types/IArticle";
+import {
+  IArticleInfo,
+  IArticleType,
+  PrevAndNextArticleData,
+} from "@/types/IArticle";
+import removeMarkdownSyntax from "@/utility/removeMarkdownSyntax";
 
 class ManagerClass {
   private dirPath: string;
@@ -20,11 +25,19 @@ class ManagerClass {
           "utf-8",
         );
 
-        const { data } = matter(markdownData);
+        const type = this.dirPath.split("/")[
+          this.dirPath.split("/").length - 1
+        ] as IArticleType["type"];
+
+        const { data, content } = matter(markdownData);
+
+        const removedMarkdownSyntax = removeMarkdownSyntax(content);
 
         const result: IArticleInfo = {
           ...(<IArticleInfo>data),
           href: fileName.replace(/.md/, ""),
+          type: type,
+          readingTime: Math.floor(removedMarkdownSyntax.length / 400),
         };
 
         return result;
@@ -79,11 +92,19 @@ class ManagerClass {
       })
       .filter((v) => v) as PrevAndNextArticleData[];
 
+    const type = this.dirPath.split("/")[
+      this.dirPath.split("/").length - 1
+    ] as IArticleType["type"];
+
     const { data, content } = matter(markdownData);
+
+    const removedMarkdownSyntax = removeMarkdownSyntax(content);
 
     const result = {
       ...(<IArticleInfo>data),
       content: content,
+      type: type,
+      readingTime: Math.floor(removedMarkdownSyntax.length / 400),
     };
 
     return {
